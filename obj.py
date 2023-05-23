@@ -47,10 +47,10 @@ def menu():
     return escolha
 
 def porcentagem(estado):
-    #Reset de variáveis
     if not pesquisa[estado]:
         opcaoInvalida()
     else:
+        #Reset de variáveis
         somaTotal, desempregoTotal,eticaTotal,segurancaTotal,regulamentacaoTotal,potencialTotal = 0,0,0,0,0,0
 
 
@@ -121,4 +121,4 @@ while True:
     else:
         opcaoInvalida()
 
-    print("\n"*3) #Quebra linha todo menu
+    print("\n"*3)
