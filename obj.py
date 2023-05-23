@@ -1,83 +1,35 @@
 pesquisa = {'AC':[], 'AL':[], 'AP':[], 'AM':[], 'BA':[], 'CE':[], 'DF':[], 'ES':[], 'GO':[], 'MA':[], 'MT':[], 'MS':[], 'MG':[], 'PA':[], 'PB':[], 'PR':[], 'PE':[], 'PI':[], 'RJ':[], 'RN':[], 'RS':[], 'RO':[],
 'RR':[], 'SC':[], 'SP':[], 'SE':[], 'TO':[]}
 
-class Relevancia:
-    def __init__(self):
-        self.__desemprego = None
-        self.__etica = None
-        self.__seguranca = None
-        self.__regulamentacao = None
-        self.__potencial = None
+from classe import Relevancia
 
-    def setOpiniao(self,desemprego,etica,seguranca,regulamentacao,potencial):
-        self.__desemprego = desemprego
-        self.__etica = etica
-        self.__seguranca = seguranca
-        self.__regulamentacao = regulamentacao
-        self.__potencial = potencial
-    
-    def calcularSomaTotal(self):
-        # Calculando a soma total dos atributos
-        return sum([int(self.__desemprego), int(self.__etica), int(self.__seguranca), int(self.__regulamentacao), int(self.__potencial)])
-
-    def getDesemprego(self):
-        return int(self.__desemprego)
-    def getEtica(self):
-        return int(self.__etica)
-    def getSeguranca(self):
-        return int(self.__seguranca)
-    def getRegulamentacao(self):
-        return int(self.__regulamentacao)
-    def getPotencial(self):
-        return int(self.__potencial)
-    
-
-    """porcentagem_desemprego = (self.__desemprego / soma_total) * 100
-    porcentagem_etica = (self.__etica / soma_total) * 100
-    porcentagem_seguranca = (self.__seguranca / soma_total) * 100
-    porcentagem_regulamentacao = (self.__regulamentacao / soma_total) * 100
-    porcentagem_potencial = (self.__potencial / soma_total) * 100"""
-
-
-    def __str__(self):
-        #Seta o objeto como string quando printar
-        return f'Desemprego: {self.__desemprego}, etica: {self.__etica},segurança{self.__seguranca},regulamentação:{self.__regulamentacao},potencial: {self.__potencial}'
-    
-    def __repr__(self):
-        #Por conta do obj estar dentro de uma lista, o __str__ não funciona, tem q ser repr
-        return f'Desemprego: {self.__desemprego}, etica: {self.__etica},segurança{self.__seguranca},regulamentação:{self.__regulamentacao},potencial: {self.__potencial}'
-
-
-
-def validaEstado(estado):
+def validaEstado():
     #Procura a sigla na lista de estados e vê se existe
     while True:
+        estado = (input("Qual a sigla do estado desejado? ").upper())
         if estado in pesquisa.keys():
             return estado
         else:
-            input("Estado inválido, enter para continuar: ")
-            estado = validaEstado(input("Qual a sigla do seu estado? ").upper())
-            
-
+            opcaoInvalida()
 
 def escolhaValida(escolha,print):
     #Vê se a nota é um número e se está entre 1 e 5
     while True:
         if not escolha.isnumeric() or int(escolha) < 1 or int(escolha) > 5:
-            input("Opção inválida - pressione Enter")
+            opcaoInvalida()
             escolha = (input(print))
         else:
             return escolha
 
-
 def realizaPesquisa():
     #Gera as mensagens de pergunta e recebe os valores
-    desempregoPrint = "Qual sua preocupação com desemprego?"
-    eticaPrint = "Qual sua preocupação com etica?"
-    segurancaPrint = "Qual sua preocupação com seguranca?"
-    regulaPrint = "Qual sua preocupação com regulamentação?"
-    potencialPrint = "Qual sua preocupação com potencial?"
+    desempregoPrint = "De 1 a 5, qual sua preocupação com desemprego?"
+    eticaPrint = "De 1 a 5, qual sua preocupação com etica?"
+    segurancaPrint = "De 1 a 5, qual sua preocupação com seguranca?"
+    regulaPrint = "De 1 a 5, qual sua preocupação com regulamentação?"
+    potencialPrint = "De 1 a 5, quanto de potencial você acha que tem?"
 
+    #O motivo de mensagens em variáveis é pra que a função possa imprimir as frases certas e não uma genérica
     desemprego = escolhaValida(input(desempregoPrint),desempregoPrint)
     etica = escolhaValida(input(eticaPrint),eticaPrint)
     seguranca = escolhaValida(input(segurancaPrint),segurancaPrint)
@@ -90,34 +42,20 @@ def menu():
     escolha = input("""Menu
 0- Finalizar o Programa
 1- Realizar avaliação
-2- Relatório\n""")
+2- Relatório
+3- Esvaziar uma lista\n""")
     return escolha
 
-"""----------------------------"""
-
-while True:
-    print("\n"*3) #Quebra linha todo menu
-    escolha = menu()
-
-    if escolha == "1":
-        #Realizar a avaliação
-        estado = validaEstado(input("Qual a sigla do seu estado?").upper())
-        formulario = realizaPesquisa()
-    
-        #print(formulario)
-        rlv = Relevancia()
-        rlv.setOpiniao(formulario[0],formulario[1],formulario[2],formulario[3],formulario[4])
-
-        print(rlv)
-        pesquisa[estado].append(rlv)
-        print(pesquisa[estado].__str__())
-
-    elif escolha == "2":
-        estado = validaEstado(input(f"Qual estado deseja ver a porcentagem?").upper())
+def porcentagem(estado):
+    #Reset de variáveis
+    if not pesquisa[estado]:
+        opcaoInvalida()
+    else:
         somaTotal, desempregoTotal,eticaTotal,segurancaTotal,regulamentacaoTotal,potencialTotal = 0,0,0,0,0,0
 
 
         for i in pesquisa[estado]:
+            #Looping que passa por todas as listas de um estado pra ir somando as notas
             somaTotal += i.calcularSomaTotal()
 
             desempregoTotal += i.getDesemprego()
@@ -126,18 +64,61 @@ while True:
             regulamentacaoTotal += i.getRegulamentacao()
             potencialTotal += i.getPotencial()
 
-        porcentagem_desemprego = (desempregoTotal / somaTotal) * 100
-        porcentagem_etica = (eticaTotal / somaTotal) * 100
-        porcentagem_seguranca = (segurancaTotal / somaTotal) * 100
-        porcentagem_regulamentacao = (regulamentacaoTotal / somaTotal) * 100
-        porcentagem_potencial = (potencialTotal / somaTotal) * 100
+        #Transforma tudo em porcentagem e devolve num limite de dois decimais
+        porcentagem_desemprego = ((desempregoTotal / somaTotal) * 100).__round__(2)
+        porcentagem_etica = ((eticaTotal / somaTotal) * 100).__round__(2)
+        porcentagem_seguranca = ((segurancaTotal / somaTotal) * 100).__round__(2)
+        porcentagem_regulamentacao = ((regulamentacaoTotal / somaTotal) * 100).__round__(2)
+        porcentagem_potencial = ((potencialTotal / somaTotal) * 100).__round__(2)
 
-        print(f"Desemprego:{porcentagem_desemprego}\n\
+        #Print da porcentagem
+        print(f"\nEssas são as poncentagens do estado {estado}\nDesemprego:{porcentagem_desemprego}\n\
 Ética:{porcentagem_etica}\nSegurança:{porcentagem_seguranca}\n\
 Regulamentação:{porcentagem_regulamentacao}\nPotencial:{porcentagem_potencial}")
+    
+def opcaoInvalida():
+    input("Opção invalida - Enter para continuar")
+
+"""----------------------------"""
+
+while True:
+
+    escolha = menu()
+
+    if escolha == "1":
+        #Realizar a avaliação
+        estado = validaEstado()
+        formulario = realizaPesquisa()
+    
+        #print(formulario)
+        rlv = Relevancia()
+        rlv.setOpiniao(formulario[0],formulario[1],formulario[2],formulario[3],formulario[4])
+
+        pesquisa[estado].append(rlv)
+        input(f"Pesquisa adicionada ao estado {estado}\nEnter para continuar:")
+
+    elif escolha == "2":
+        #Print na porcentagem de cada atributo do estado
+        estado = validaEstado()
+        porcentagem(estado)
+        input("Enter para continuar: ")
+
+    elif escolha == "3":
+        estado = validaEstado()
+        porcentagem(estado)
+        confirma = input("Tem certeza que deseja apagar? - S para confirmar").upper()
+        if confirma == "S":
+            pesquisa[estado] = []
+            input(f"Estado {estado} esvaziado - Enter para continuar")
+        else:
+            input("Voltando ao menu, enter para continuar")
+        
+        
 
     elif escolha == "0":
         input("Desligando - Enter para continuar")
         break
     else:
-        input("Opção invalida, enter para continuar")
+        opcaoInvalida()
+
+    print("\n"*3) #Quebra linha todo menu
