@@ -9,6 +9,7 @@ class Relevancia:
         }
 
     def setOpiniao(self,desemprego,etica,seguranca,regulamentacao,potencial):
+        """Seta os dados da pesquisa"""
         self.__topicos[0] = desemprego
         self.__topicos[1] = etica
         self.__topicos[2] = seguranca
@@ -17,8 +18,10 @@ class Relevancia:
     
     #get em cada atributo pra ter a porcentagem de cada um
     def getTopicos(self):
+        """Busca os dados da pesquisa"""
         return self.__topicos
 
     def __repr__(self):
+        """Transforma a pesquisa em uma string pra print"""
         #Por conta do obj estar dentro de uma lista, o __str__ não funciona, tem q ser repr
         return f'Desemprego: {self.__topicos[0]}, etica: {self.__topicos[1]},segurança{self.__topicos[2]},regulamentação:{self.__topicos[3]},potencial: {self.__topicos[4]}'

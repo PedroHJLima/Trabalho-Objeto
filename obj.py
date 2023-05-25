@@ -1,18 +1,21 @@
-#Criar dicionário automaticamente
-
-pesquisa = {'AC':[], 'AL':[], 'AP':[], 'AM':[], 'BA':[], 'CE':[], 'DF':[], 'ES':[], 'GO':[], 'MA':[], 'MT':[], 'MS':[], 'MG':[], 'PA':[], 'PB':[], 'PR':[], 'PE':[], 'PI':[], 'RJ':[], 'RN':[], 'RS':[], 'RO':[],
-'RR':[], 'SC':[], 'SP':[], 'SE':[], 'TO':[]}
+pesquisa = {'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'}
+dicionario = {}
 
 from classe import Relevancia
 
+def criaDicionario():
+    """Cria automaticamente o dicionario usando uma lista com strings"""
+    for obj in pesquisa:
+        dicionario[obj] = []
+
 def validaEstado():
     """Procura a sigla na lista de estados e vê se existe"""
-    while True:
-        estado = (input("Qual a sigla do estado desejado? ").upper())
-        if estado in pesquisa.keys():
-            return estado
-        else:
-            opcaoInvalida()
+    estado = (input("Qual a sigla do estado desejado? ").upper())
+    if estado in dicionario.keys():
+        return estado
+    else:
+        opcaoInvalida()
+        return False
 
 def escolhaValida(escolha,print):
     """Vê se a nota é um número e se está entre 1 e 5"""
@@ -50,16 +53,15 @@ def menu():
 
 def media(estado):
     """verifica se o estado existe e tira média"""
-    if not pesquisa[estado]:
+    if not dicionario[estado]:
         opcaoInvalida()
     else:
         #Reset de variáveis
         desempregoTotal,eticaTotal,segurancaTotal,regulamentacaoTotal,potencialTotal = 0,0,0,0,0
 
-
-        for i in pesquisa[estado]:
+        for i in dicionario[estado]:
             #Looping que passa por todas as listas de um estado pra ir somando as notas
-            tamanhoLista = len(pesquisa[estado])
+            tamanhoLista = len(dicionario[estado])
 
             desempregoTotal += int(i.getTopicos()[0])
             eticaTotal += int(i.getTopicos()[1])
@@ -82,7 +84,9 @@ Regulamentação:{porcentagem_regulamentacao}\nPotencial:{porcentagem_potencial}
 def opcaoInvalida():
     input("Opção invalida - Enter para continuar")
 
-"""----------------------------"""
+"""--------------- Main Code -------------"""
+
+criaDicionario()
 
 while True:
 
@@ -97,29 +101,31 @@ while True:
         rlv = Relevancia()
         rlv.setOpiniao(formulario[0],formulario[1],formulario[2],formulario[3],formulario[4])
 
-        pesquisa[estado].append(rlv)
+        dicionario[estado].append(rlv)
         input(f"Pesquisa adicionada ao estado {estado}\nEnter para continuar:")
-        print(rlv)
 
     elif escolha == "2":
         #Print na porcentagem de cada atributo do estado
         estado = validaEstado()
-        media(estado)
-        input("Enter para continuar: ")
+        if estado != False:
+            media(estado)
+            input("Enter para continuar: ")
 
     elif escolha == "3":
         estado = validaEstado()
-        media(estado)
-        confirma = input("Tem certeza que deseja apagar? - S para confirmar").upper()
-        if confirma == "S":
-            pesquisa[estado] = []
-            input(f"Estado {estado} esvaziado - Enter para continuar")
-        else:
-            input("Voltando ao menu, enter para continuar")
+        if estado != False: 
+            media(estado)
+            confirma = input("Tem certeza que deseja apagar? - S para confirmar").upper()
+            if confirma == "S":
+                dicionario[estado] = []
+                input(f"Estado {estado} esvaziado - Enter para continuar")
+            else:
+                input("Voltando ao menu, enter para continuar")
         
     elif escolha == "0":
         input("Desligando - Enter para continuar")
         break
+
     else:
         opcaoInvalida()
 
