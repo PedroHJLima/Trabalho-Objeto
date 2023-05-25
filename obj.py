@@ -112,6 +112,7 @@ while True:
             input("Enter para continuar: ")
 
     elif escolha == "3":
+        #Limpa estado
         estado = validaEstado()
         if estado != False: 
             media(estado)
