@@ -1,34 +1,24 @@
 class Relevancia:
     def __init__(self):
-        self.__desemprego = None
-        self.__etica = None
-        self.__seguranca = None
-        self.__regulamentacao = None
-        self.__potencial = None
+        self.__topicos = {
+            "Desemprego":0,
+            "Etica":0  ,
+            "Seguranca":0,
+            "Regulamentacao":0,
+            "Potencial":0
+        }
 
     def setOpiniao(self,desemprego,etica,seguranca,regulamentacao,potencial):
-        self.__desemprego = desemprego
-        self.__etica = etica
-        self.__seguranca = seguranca
-        self.__regulamentacao = regulamentacao
-        self.__potencial = potencial
+        self.__topicos[0] = desemprego
+        self.__topicos[1] = etica
+        self.__topicos[2] = seguranca
+        self.__topicos[3] = regulamentacao
+        self.__topicos[4] = potencial
     
-    def calcularSomaTotal(self):
-        # Calculando a soma total dos atributos
-        return sum([int(self.__desemprego), int(self.__etica), int(self.__seguranca), int(self.__regulamentacao), int(self.__potencial)])
-
     #get em cada atributo pra ter a porcentagem de cada um
-    def getDesemprego(self):
-        return int(self.__desemprego)
-    def getEtica(self):
-        return int(self.__etica)
-    def getSeguranca(self):
-        return int(self.__seguranca)
-    def getRegulamentacao(self):
-        return int(self.__regulamentacao)
-    def getPotencial(self):
-        return int(self.__potencial)
-    
+    def getTopicos(self):
+        return self.__topicos
+
     def __repr__(self):
         #Por conta do obj estar dentro de uma lista, o __str__ não funciona, tem q ser repr
-        return f'Desemprego: {self.__desemprego}, etica: {self.__etica},segurança{self.__seguranca},regulamentação:{self.__regulamentacao},potencial: {self.__potencial}'
+        return f'Desemprego: {self.__topicos[0]}, etica: {self.__topicos[1]},segurança{self.__topicos[2]},regulamentação:{self.__topicos[3]},potencial: {self.__topicos[4]}'
